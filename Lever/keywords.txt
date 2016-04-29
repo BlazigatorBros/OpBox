@@ -1,0 +1,8 @@
+Lever	KEYWORD1
+state	KEYWORD2
+setCarriage	KEYWORD2
+IN	KEYWORD3
+OUT	KEYWORD3
+outLimitState	KEYWORD2
+inLimitState	KEYWORD2
+stopCarriage	KEYWORD2

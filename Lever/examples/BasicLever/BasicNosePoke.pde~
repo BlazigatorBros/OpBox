@@ -1,0 +1,51 @@
+#include <NosePoke.h>
+#define redPin 11
+#define greenPin 10
+#define amberPin 9
+#define receverPin 2
+
+NosePoke myNosePoke = NosePoke(receverPin,redPin,greenPin,amberPin);
+
+void setup()                    
+{
+    //turn on LED's
+    lights(true);
+}
+
+void loop()                    
+{
+    if(myNosePoke.state()) {//if a nosepoke is registered
+        chaser(10);//disco party
+        delay(1000);//wait one second
+        //turn on LED's
+        lights(true);
+    }
+}
+
+//simple LED chaser
+void chaser(int n) {
+    //turn off the lights
+    lights(false);
+   
+    //loop throew all the colors n times. 
+    for(int i = 0; i< n; i ++) {
+        myNosePoke.amber(true);
+        delay(100);
+        myNosePoke.amber(false);
+
+        myNosePoke.green(true);
+        delay(100);
+        myNosePoke.green(false);
+
+        myNosePoke.red(true);
+        delay(100);
+        myNosePoke.red(false);
+    }
+}
+
+//set state of all lights
+void lights(bool state) {
+    myNosePoke.red(state);
+    myNosePoke.green(state);
+    myNosePoke.amber(state);
+}
