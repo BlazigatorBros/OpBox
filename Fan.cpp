@@ -12,6 +12,10 @@ void Fan::fanOff() {
 
 }
 
-voif Fan::setSpeed(int speed) {
+void Fan::setSpeed(int speed) {
 
+}
+
+int Fan::getSpeed() {
+	return 0;
 }

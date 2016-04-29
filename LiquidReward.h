@@ -5,4 +5,6 @@ class LiquidReward {
         public:
                 LiquidReward(int pin);
                 void dispense(int duration);
-}
+};
+
+#endif

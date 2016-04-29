@@ -6,7 +6,8 @@ class Fan {
                 Fan(int pin);
                 void fanOn();
                 void fanOff();
-                void setSpeed();
-}
+                void setSpeed(int speed);
+                int getSpeed();
+};
 
 #endif

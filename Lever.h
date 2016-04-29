@@ -6,13 +6,17 @@
 class Lever: public Instrument {
 
         public:
-                Lever(int pin, 
-                        int inMotor, 
-                        int outMotor, 
-                        int inLimit, 
-                        int outLimit);
+                Lever(int pin,
+                        int inMotor,
+                        int outMotor,
+                        int inLimit,
+                        int outLimit)
+                        : Instrument(pin)
+                {
 
-                void setCarrage(bool state);
-}
+                }
+
+                void setCarriage(bool state);
+};
 
 #endif

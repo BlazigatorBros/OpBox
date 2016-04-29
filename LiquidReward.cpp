@@ -4,6 +4,6 @@ LiquidReward::LiquidReward(int pin) {
 
 }
 
-void LiquidReward::LiquidReward(int duration) {
+void LiquidReward::dispense(int duration) {
 
 }

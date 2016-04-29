@@ -4,7 +4,7 @@
 class Instrument {
         public:
                 Instrument(int pin);
-                bool getStatus();
-}
+                bool getState();
+};
 
 #endif

@@ -4,6 +4,6 @@ Instrument::Instrument(int pin) {
 
 }
 
-Instrument::Instrument() {
+bool Instrument::getState() {
 	return true;
 }
