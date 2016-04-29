@@ -10,8 +10,9 @@ class Lever: public Instrument {
                         int inMotor,
                         int outMotor,
                         int inLimit,
-                        int outLimit)
-                        : Instrument(pin)
+                        int outLimit,
+                        func_t isr)
+                        : Instrument(pin, isr)
                 {
 
                 }
