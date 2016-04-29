@@ -1,0 +1,7 @@
+Fan	KEYWORD1
+Instrument	KEYWORD1
+Lever 	KEYWORD1
+LiquidReward	KEYWORD1
+getStatus	KEYWORD2
+setCarrage	KEYWORD2
+dispence	KEYWORD2
