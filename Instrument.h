@@ -12,7 +12,7 @@ typedef void (*func_t)();
 class Instrument {
         public:
                 Instrument(int pin, func_t isr);
-                boolean getState();
+                boolean getState(int debounce);
         private:
                 int _pin;
 };

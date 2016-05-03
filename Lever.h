@@ -6,6 +6,13 @@
 class Lever: public Instrument {
 
         public:
+        
+                void setCarriage(bool state);
+                bool outLimitState();
+                bool inLimitState();
+                void stopCarriage();
+                void init();
+
                 Lever(int pin,
                         int inLimit,
                         int outLimit,
@@ -19,6 +26,7 @@ class Lever: public Instrument {
                     _outLimitPin = outLimit;
                     _motorPinOut = outMotor;
                     _motorPinIn = inMotor;
+                    stopCarriage();
                     pinMode(_motorPinOut, OUTPUT);
                     pinMode(_motorPinIn, OUTPUT);
                     pinMode(_leverPin, INPUT);
@@ -27,12 +35,6 @@ class Lever: public Instrument {
                     stopCarriage();
                     setCarriage(true);
                 }
-
-                void setCarriage(bool state);
-                bool outLimitState();
-                bool inLimitState();
-                void stopCarriage();
-                void init();
 
         private:
                 void go(bool direction);
