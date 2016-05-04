@@ -2,10 +2,11 @@
 
 SmokeEmitter::SmokeEmitter(HardwareSerial * ser) {
 	_ser = ser;
+	_ser->begin(9600);
 }
 
 void SmokeEmitter::sendCommand(String command) {
-	_ser->println(command);
+	_ser->print(command);
 }
 
 int SmokeEmitter::checkStatus() {
@@ -20,14 +21,25 @@ int SmokeEmitter::checkStatus() {
 
 	if (_stringComplete) {
 
-		if (_inputString.startsWith("Warning:")) {
-			return WARNING;
+        _lastMessage = _inputString;
+        _inputString = "";
+		_stringComplete = false;
+
+		if (_lastMessage.startsWith("Warning:")) {
+			return S_WARNING;
 		}
 
-		if(_inputString.startsWith("Error:")) {
-			return ERROR;
+		if(_lastMessage.startsWith("Error:")) {
+			return S_ERROR;
 		}
+		
+		return S_OK;
+
 	}
 
-	return OK;
+	return S_WAIT;
+}
+
+String SmokeEmitter::getLastMessage() {
+    return _lastMessage;
 }

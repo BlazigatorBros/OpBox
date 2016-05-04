@@ -5,9 +5,10 @@
 #define BURN "burn"
 #define CLEAR "clear"
 
-#define OK 0
-#define WARNING 1
-#define ERROR 2
+#define S_WAIT 0
+#define S_OK 1
+#define S_WARNING 2
+#define S_ERROR 3
 
 #if ARDUINO >= 100
 #include "Arduino.h"
@@ -20,10 +21,12 @@ class SmokeEmitter {
                 SmokeEmitter(HardwareSerial * ser);
                 void sendCommand(String Command);
                 int checkStatus();
+                String getLastMessage();
         private:
                 HardwareSerial * _ser;
                 String _inputString;
                 boolean _stringComplete;
+                String _lastMessage;
 };
 
 #endif
