@@ -14,6 +14,9 @@ int SmokeEmitter::checkStatus() {
 
 		char inChar = (char)_ser->read(); 
 		_inputString += inChar;
+		if (inChar == '\r') {
+		    _inputString = "";
+		}
 		if (inChar == '\n') {
 		    _stringComplete = true;
 		}
