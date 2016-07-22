@@ -2,6 +2,7 @@
 #define Lever_h
 
 #include "Instrument.h"
+#include <SPI.h>
 
 class Lever: public Instrument {
 
@@ -12,25 +13,23 @@ class Lever: public Instrument {
                 bool inLimitState();
                 void stopCarriage();
                 void init();
-                void SPIcmd(uint16_t command);
 
-                Lever(  int pin,
+                Lever(int pin,
                         int inLimit,
                         int outLimit,
-                        uint16_t outCMD,
-                        uint16_t inCMD,
-                        int ssPin,
+                        int outMotor,
+                        int inMotor,
                         func_t isr)
                         : Instrument(pin, isr)
                 {
-                    _ssPin = ssPin;
+
                     _inLimitPin = inLimit;
                     _outLimitPin = outLimit;
-                    _outCMD = outCMD;
-                    _inCMD = inCMD;
-                    init();
+                    _motorPinOut = outMotor;
+                    _motorPinIn = inMotor;
                     stopCarriage();
-                    pinMode(_ssPin, OUTPUT);
+                    pinMode(_motorPinOut, OUTPUT);
+                    pinMode(_motorPinIn, OUTPUT);
                     pinMode(_leverPin, INPUT);
                     pinMode(_inLimitPin, INPUT);
                     pinMode(_outLimitPin, INPUT);
@@ -40,10 +39,12 @@ class Lever: public Instrument {
 
         private:
                 void go(bool direction);
-                int _ssPin;
+                int _motorPinOut;
+                int _motorPinIn;
                 int _leverPin;
                 int _inLimitPin;
                 int _outLimitPin;
+                int _directionPin;
                 int _PWM_pin;
 };
 

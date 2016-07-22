@@ -1,7 +1,4 @@
 #include "Lever.h"
-#include <SPI.h>
-
-#define M_stop 0x0781
 
 void Lever::setCarriage(bool state) {
 
@@ -16,8 +13,7 @@ void Lever::setCarriage(bool state) {
 }
 
 void Lever::init() {
-	SPI.begin();
-	digitalWrite(_ssPin, HIGH);
+	setCarriage(true);
 }
 
 bool Lever::inLimitState() {
@@ -29,23 +25,16 @@ bool Lever::outLimitState() {
 }
 
 void Lever::stopCarriage() {
-	SPIcmd(M_stop)
+	digitalWrite(_motorPinOut, HIGH);
+	digitalWrite(_motorPinIn, HIGH);
 }
 
 void Lever::go(bool direction) {
-	stopCarriage()
+	stopCarriage();
 	if(direction) {
-		SPIcmd(_inCMD);
+		digitalWrite(_motorPinOut, LOW);
 	}
 	else {
-		SPIcmd(_outCMD);
+		digitalWrite(_motorPinIn, LOW);
 	}
-}
-
-void Lever::SPIcmd(uint16_t command){
-	SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE0));
-	digitalWrite(_ssPin, LOW);
-	SPI.transfer(command,16);
-	digitalWrite(_ssPin, HIGH);
-	SPI.endTransaction();
 }
