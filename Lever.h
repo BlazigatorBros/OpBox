@@ -11,8 +11,8 @@ class Lever: public Instrument {
                 bool outLimitState();
                 bool inLimitState();
                 void stopCarriage();
-                void init();
-                void SPIcmd(uint16_t command);
+                uint16_t SPIcmd(uint16_t command);
+                uint16_t SPIdata;
 
                 Lever(  int pin,
                         int inLimit,
@@ -35,8 +35,8 @@ class Lever: public Instrument {
                     pinMode(_inLimitPin, INPUT);
                     pinMode(_outLimitPin, INPUT);
                     stopCarriage();
-                    setCarriage(true);
                 }
+
 
         private:
                 void go(bool direction);
@@ -45,6 +45,8 @@ class Lever: public Instrument {
                 int _inLimitPin;
                 int _outLimitPin;
                 int _PWM_pin;
+                int _outCMD;
+                int _inCMD;
 };
 
 #endif
