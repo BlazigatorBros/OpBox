@@ -37,7 +37,6 @@ class Lever: public Instrument {
                     stopCarriage();
                 }
 
-
         private:
                 void go(bool direction);
                 int _ssPin;

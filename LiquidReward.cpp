@@ -12,7 +12,6 @@ LiquidReward::LiquidReward(int num_steps, int ssPin) {
 	_num_steps = num_steps;
 	_ssPin = ssPin;
 	_current_step = 0;
-	// _step_delay = 60L * 1000L * 1000L / _step_count / _what_speed;
 }
 
 void LiquidReward::dispense(int steps_to_move) {
