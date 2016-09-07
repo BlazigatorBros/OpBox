@@ -6,22 +6,21 @@ LA-Up/Dn-In:        HIGH = LA down                      LOW = LA up
 Motor_EN-In:        HIGH = Wheel motion disabled        LOW = Wheel motion enabled
 Ignition_On/Off-In: HIGH = On                           LOW = Off
 FAN_PWM-In:         Fan speed proportional to duty cycle 
-
 IR-Out:             HIGH = Magazine empty               LOW = Magazine not empty
 LA-FB-Out:          HIGH = LA down or rising            LOW = LA up or falling 
 Data#-Out:          HIGH = slot ready to recieve        LOW = slot moving in motion
 Fan_FB-Out:         Fan tachyometer out
-
-
 */
+
 #include "Arduino.h"
 #include "SmokeMachine.h"
 
 volatile boolean magEmpty;
+#define clampTime 10000
 
-SmokeMachine::SmokeMachine(int wheelDirPin, int wheelMovePin, int wheelEnPin, int ignitionPin, int fanCtrlPin, int fanFbPin, int slot1Pin, int slot2Pin, int slot3Pin, int clampPin, int loaderIRPin, int loaderFbPin, int loaderDirPin, int burnTime) {
+SmokeMachine::SmokeMachine(int wheelDirPin, int wheelMovePin, int wheelEnPin, int ignitionPin, int fanCtrlPin, int fanFbPin, int slot1Pin, int slot2Pin, int slot3Pin, int clampPin, int loaderIRPin, int loaderFbPin, int loaderDirPin) {
 
-    _burnTime = burnTime;
+    // _burnTime = burnTime;
     _wheelEnPin = wheelEnPin;
     _fanFbPin = fanFbPin;
     _slot1Pin = slot1Pin;
@@ -70,10 +69,12 @@ int SmokeMachine::getPos() {
     if(digitalRead(_slot1Pin)) return 1;
     else if(digitalRead(_slot2Pin)) return 2;
     else if(digitalRead(_slot3Pin)) return 3;
+    else return 0;
 } 
 
 void SmokeMachine::moveWheel() {
-
+    clampRound(false);
+    delay(500);
     int nextPos = 0;
     int currentPos = getPos();
     if (currentPos == 3) nextPos = 1;
@@ -83,24 +84,39 @@ void SmokeMachine::moveWheel() {
         digitalWrite(_wheelMovePin,LOW);
     }  
     digitalWrite(_wheelMovePin,HIGH);
-
     while(getPos() != nextPos);
+    delay(500);
+//    clampRound(true);
+}
 
-/*
+void SmokeMachine::Empty() {
+    clampRound(false);
+    delay(500);
+    int nextPos = 0;
     int currentPos = getPos();
-
+    if (currentPos == 3) nextPos = 1;
+    else nextPos = currentPos + 1;
     while(getPos() == currentPos) {
         digitalWrite(_wheelMovePin,LOW);
     }  
     digitalWrite(_wheelMovePin,HIGH);
-
-    while((getPos() != (currentPos + 1)) || (getPos() != (currentPos - 2)));
-*/
+    while(getPos() != nextPos);
 }
 
 void SmokeMachine::ignition(bool ignit) {
-    if(ignit) digitalWrite(_ignitionPin, HIGH);
-    else digitalWrite(_ignitionPin,LOW);
+  if(ignit) digitalWrite(_ignitionPin, HIGH);
+  else digitalWrite(_ignitionPin,LOW);
+}
+
+void SmokeMachine::fanCtrl(bool Fan_Ctrl) {
+  if(Fan_Ctrl) digitalWrite(_fanCtrlPin, HIGH);
+  else digitalWrite(_fanCtrlPin, LOW);
+}
+
+bool SmokeMachine::scanLA() {
+  if(digitalRead(_loaderIRPin) == 1) return false;
+  else
+    return true;
 }
 
 void SmokeMachine::raiseLA() {
@@ -112,12 +128,30 @@ void SmokeMachine::raiseLA() {
 }
 
 bool SmokeMachine::loadRound() {
+    clampRound(true);
     if (digitalRead(_loaderIRPin) == 1) return false;
+    else {
+        //moveWheel();
+        //delay(1000);
+        raiseLA();
+        return true;
+    }
+}
+
+int SmokeMachine::standbyInit() {
+    if (digitalRead(_loaderIRPin) == 1) return 0;
     else {
         raiseLA();
         moveWheel();
-        delay(1000);
-        return true;
+//        delay(1000);
+//        while( !digitalRead(_slot1Pin) && !digitalRead(_slot2Pin) && !digitalRead(_slot3Pin));
+        clampRound(true);
+        if(digitalRead(_loaderIRPin) == 1) return 1;
+        else
+        {
+          raiseLA();
+          return 2;
+        }
     }
 }
 
@@ -126,17 +160,56 @@ void SmokeMachine::clampRound(bool dir) {
     else digitalWrite(_clampPin, LOW);
 }
 
-bool SmokeMachine::burnRound() {
+void SmokeMachine::rotWheel() {
+  moveWheel();
+  delay(1000);
+}
+
+void SmokeMachine::burnRoundnRot(int burnTime) {
     
-    if(loadRound()) {
-        clampRound(true);
-        ignition(true);
-        delay(_burnTime);
-        ignition(false);
-        delay(_burnTime);
-        clampRound(false);
-        delay(500);
+    //if(loadRound()) {
+    //clampRound(true);
+    ignition(true);
+    delay(burnTime);
+    ignition(false);
+    delay(clampTime);
+    clampRound(false);
+    delay(500);
+    moveWheel();
+    delay(1000);
+    clampRound(true);
+}
+
+void SmokeMachine::burnRound(int burnTime) {
+    
+    //if(loadRound()) {
+    //clampRound(true);
+    ignition(true);
+    delay(burnTime);
+    ignition(false);
+    delay(clampTime);
+    clampRound(false);
+    delay(500);
+}
+
+/*bool SmokeMachine::burnRound() {
+    
+    //if(loadRound()) {
+    clampRound(true);
+    ignition(true);
+    delay(_burnTime);
+    ignition(false);
+    delay(_burnTime);
+    clampRound(false);
+    delay(500);
+    if(loadRound()){
         return true;
     }
-    else return false;
-}
+    else
+    {
+        moveWheel();
+        delay(1000);
+        return false;
+    }
+}*/
+

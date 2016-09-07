@@ -7,17 +7,26 @@
 #include "WProgram.h"
 #endif
 
-
 class SmokeMachine
 {
   public:
-    SmokeMachine(int wheelDirPin, int wheelMovePin, int wheelEnPin, int ignitionPin, int fanCtrlPin, int fanFbPin, int slot1Pin, int slot2Pin, int slot3Pin, int clampPin, int loaderIRPin, int loaderFbPin, int loaderDirPin, int burnTime);
-    bool burnRound();
+    SmokeMachine(int wheelDirPin, int wheelMovePin, int wheelEnPin, int ignitionPin, int fanCtrlPin, int fanFbPin, int slot1Pin, int slot2Pin, int slot3Pin, int clampPin, int loaderIRPin, int loaderFbPin, int loaderDirPin);
+    void burnRound(int burnTime);
+   
     bool loadRound();
+    bool scanLA();
+    
+    int standbyInit();
+    int getPos();
+
+    void Empty();
     void moveWheel();
     void clampRound(bool dir);
     void ignition(bool ignit);
-
+    void fanCtrl(bool Fan_Ctrl);
+    void burnRoundnRot(int burnTime);
+    void rotWheel();
+    
   private:
     int _burnTime;
     int _wheelEnPin;
@@ -35,7 +44,7 @@ class SmokeMachine
     int _loaderDirPin;
 
     void initialize();
-    int getPos();
+    
     void raiseLA();
 //    void clampRound(bool dir);
 };
