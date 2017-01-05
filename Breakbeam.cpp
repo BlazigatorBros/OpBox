@@ -38,7 +38,7 @@ boolean Breakbeam::stayedBroken(int interval){
 		return false;
 }
 
-void Breakbeam::movement() {
+void movement() {
     beamBroken = true;
     isBroken = true;
 }

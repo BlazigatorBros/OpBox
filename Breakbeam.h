@@ -12,10 +12,13 @@ class Breakbeam {
     public:
         Breakbeam(int detector_pin);
 		bool stayedBroken(int time);
-		void movement();
+
     private:
         int _detector_pin;
-        bool chk_state;
         bool isBroken;
+        bool chk_state;
 };
+    
+void movement();
+
 #endif
